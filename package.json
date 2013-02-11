@@ -22,5 +22,8 @@
     "dbfcat": "./bin/dbfcat",
     "shpcat": "./bin/shpcat",
     "shp2json": "./bin/shp2json"
+  },
+  "script": {
+    "test" : "make test"
   }
 }
