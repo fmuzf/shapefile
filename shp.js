@@ -1,8 +1,11 @@
-var file = require("./file");
+var file = require("./file"),
+    fs = require("fs");
 
 exports.readStream = function(filename) {
-  var stream = file.readStream(filename),
-      shapeType,
+  var stream = file.readStream();
+  fs.createReadStream(filename).pipe(stream);
+
+  var shapeType,
       readShapeType,
       read = stream.read;
 

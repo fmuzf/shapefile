@@ -1,8 +1,12 @@
-var file = require("./file");
+var file = require("./file"),
+    fs = require("fs");
 
 exports.readStream = function(filename) {
-  var stream = file.readStream(filename),
-      read = stream.read,
+  var stream = file.readStream();
+
+  fs.createReadStream(filename).pipe(stream);
+
+  var read = stream.read,
       fileType,
       fileDate,
       fieldDescriptors = [],

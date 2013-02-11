@@ -1,20 +1,25 @@
-var fs = require("fs"),
-    events = require("events");
+var stream = require("stream");
 
-exports.readStream = function(filename) {
-  var emitter = new events.EventEmitter(),
-      read,
+exports.readStream = function() {
+  var emitter = new stream.Stream();
+  emitter.writeable = true;
+  emitter.end = function end() {
+    readAll = true;
+    process.nextTick(maybeEnd);
+  };
+  emitter.on("pipe", function(src){
+    src.on("data", data)
+    .on("end", emitter.end)
+    .on("error", error);
+    });
+ 
+  var read,
       readAll = false,
       bytesNeeded,
       bytesAvailable = 0,
       bytesChunk = 0,
       chunkHead,
       chunkTail;
-
-  fs.createReadStream(filename)
-      .on("data", data)
-      .on("end", end)
-      .on("error", error);
 
   function maybeRead() {
     if (bytesAvailable >= bytesNeeded) {
@@ -64,11 +69,6 @@ exports.readStream = function(filename) {
 
   function error(e) {
     emitter.emit("error", e);
-  }
-
-  function end() {
-    readAll = true;
-    process.nextTick(maybeEnd);
   }
 
   emitter.read = function(bytes, callback) {
